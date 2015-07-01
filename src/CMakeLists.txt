@@ -20,7 +20,7 @@ message("creating ${prj} ${librexgen_version}")
 
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
   MESSAGE(STATUS "USING DEBUG MODE")
-  ADD_DEFINITIONS("-DREXGEN_DEBUG=0 -DDEBUG  -O0 -g")
+  ADD_DEFINITIONS("-DREXGEN_DEBUG=0" "-DDEBUG"  "-O0" "-g")
 
 elseif("${CMAKE_BUILD_TYPE}" STREQUAL "Profile")
   MESSAGE(STATUS "USING PROFILE MODE")
