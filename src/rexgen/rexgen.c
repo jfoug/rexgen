@@ -207,7 +207,7 @@ const char* callback() {
 }
 
 int _tmain(int argc, _TCHAR* argv[]) {
-  c_simplestring_ptr buffer = c_simplestring_new();
+  c_simplestring_ptr buffer = NULL;
   char binary_string[512];
   c_regex_ptr regex = NULL;
   c_iterator_ptr iter = NULL;
@@ -243,19 +243,21 @@ int _tmain(int argc, _TCHAR* argv[]) {
     }
   }
 
+	buffer = c_simplestring_new();
   if (prependBOM) {
     c_simplestring_push_back(buffer, create_BOM(encoding));
   }
   
-  if (strstr(regex_str, "\\0") != NULL && infile == NULL) {
-    fprintf(stderr, "You must specify a filename when you use '\\0'\n");
-    retval = 1;
-    goto cleanup_and_exit;
-  }
 
   regex = c_regex_cb(regex_str, encoding, callback);
   if (regex == NULL) {
     fprintf(stderr, "Syntax Error:\n%s\n", c_rexgen_get_last_error());
+    retval = 1;
+    goto cleanup_and_exit;
+  }
+
+  if (c_regex_uses_callback(regex) && infile == NULL) {
+    fprintf(stderr, "You must specify a filename when you use '\\0'\n");
     retval = 1;
     goto cleanup_and_exit;
   }
